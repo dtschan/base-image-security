@@ -54,7 +54,7 @@ try:
     if os.environ['TRAVIS_EVENT_TYPE'] == 'cron':
         build_tags = re.split(', *', os.environ['BUILD_TAGS'])
     else:
-        build_tags = [os.getenv['TRAVIS_BRANCH', '']]
+        build_tags = [os.getenv('TRAVIS_BRANCH', '')]
 
     i = 1
     while os.environ.get('BUILD_IMAGE%d' % i, None):
