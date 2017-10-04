@@ -39,6 +39,7 @@ def build(docker_repo, tag, github_project, docker_context, dockerfile_path = 'D
 
     build_id = response.json()['id']
     print 'Started build https://quay.io/repository/%s/build/%s/' % (docker_repo, build_id)
+    print data
     build_phase = ''
     while build_phase != 'complete' and build_phase != 'error':
       response = requests.get('%s/%s/build/%s/status' % (endpoint, docker_repo, build_id), headers=headers)
