@@ -8,7 +8,7 @@ token = os.environ['QUAY_TOKEN']
 headers = {'Authorization':'Bearer %s' % token}
 endpoint = 'https://quay.io/api/v1/repository'
 
-def build(docker_repo, tag, github_project, docker_context, dockerfile_path = 'Dockerfile'):
+def build(docker_repo, docker_tag, github_project, github_tag, docker_context, dockerfile_path = 'Dockerfile'):
 #    response = requests.get('%s/%s/trigger' % (endpoint, repo), headers=headers)
 #    response.raise_for_status()
 
@@ -53,18 +53,18 @@ def build(docker_repo, tag, github_project, docker_context, dockerfile_path = 'D
 try:
     github_project = os.environ['TRAVIS_REPO_SLUG']
     if os.environ['TRAVIS_EVENT_TYPE'] == 'cron':
-        build_tags = re.split(', *', os.environ['BUILD_TAGS'])
+        github_tags = re.split(', *', os.environ['BUILD_TAGS'])
     else:
-        build_tags = [os.getenv('TRAVIS_BRANCH', '')]
+        github_tags = [os.getenv('TRAVIS_BRANCH', '')]
 
     i = 1
     while os.environ.get('BUILD_IMAGE%d' % i, None):
-        docker_repo, docker_context, dockerfile_path, build_tag = re.split(', *', os.environ['BUILD_IMAGE%d' % i])
-        if build_tag:
-            build(docker_repo, build_tag, github_project, docker_context, dockerfile_path)
+        docker_repo, docker_context, dockerfile_path, docker_tag = re.split(', *', os.environ['BUILD_IMAGE%d' % i])
+        if docker_tag:
+            build(docker_repo, docker_tag, github_project, github_tag, docker_context, dockerfile_path)
         else:
-            for build_tag in build_tags:
-                build(docker_repo, build_tag, github_project, docker_context, dockerfile_path)
+            for tag in github_tags:
+                build(docker_repo, tag, github_project, tag, docker_context, dockerfile_path)
         i += 1
 
 except requests.exceptions.RequestException as e:
