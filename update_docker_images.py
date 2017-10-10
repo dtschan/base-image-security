@@ -49,14 +49,14 @@ def build(docker_repo, docker_tag, github_project, github_tag, docker_context, d
 try:
     github_project = os.environ['TRAVIS_REPO_SLUG']
     if os.environ['TRAVIS_EVENT_TYPE'] == 'cron':
-        github_tags = ['master']
+        github_tag = 'master'
     else:
-        github_tags = [os.getenv('TRAVIS_BRANCH')]
+        github_tag = os.getenv('TRAVIS_BRANCH')
 
     i = 1
     while os.environ.get('BUILD_IMAGE%d' % i, None):
         docker_repo, docker_context, dockerfile_path, docker_tag = re.split(', *', os.environ['BUILD_IMAGE%d' % i])
-        build(docker_repo, docker_tag, github_project, github_tags, docker_context, dockerfile_path)
+        build(docker_repo, docker_tag, github_project, github_tag, docker_context, dockerfile_path)
         i += 1
 
 except requests.exceptions.RequestException as e:
