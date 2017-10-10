@@ -19,18 +19,14 @@ def build(docker_repo, docker_tag, github_project, github_tag, docker_context, d
 #    response.raise_for_status()
 
     github_owner, github_repo = github_project.split('/')
-    match = re.match(r'v([0-9.]+)', tag)
+    match = re.match(r'v([0-9.]+)', github_tag)
     if match:
-        tag2 = match.group(1)
+        tag = match.group(1)
     else:
-        tag2 = tag
-    if tag == 'master':
-        docker_tags = [tag, 'latest']
-    else:
-        docker_tags = [tag]
+        tag = github_tag
     data = {
         "archive_url": "https://github.com/%s/archive/%s.tar.gz" % (github_project, tag),
-        "docker_tags": docker_tags,
+        "docker_tags": [docker_tag],
         "context": "/%s-%s%s" % (github_repo, tag2, docker_context),
         "dockerfile_path": "/%s-%s%s%s" % (github_repo, tag2, docker_context, dockerfile_path)
     }
@@ -53,18 +49,14 @@ def build(docker_repo, docker_tag, github_project, github_tag, docker_context, d
 try:
     github_project = os.environ['TRAVIS_REPO_SLUG']
     if os.environ['TRAVIS_EVENT_TYPE'] == 'cron':
-        github_tags = re.split(', *', os.environ['BUILD_TAGS'])
+        github_tags = ['master']
     else:
-        github_tags = [os.getenv('TRAVIS_BRANCH', '')]
+        github_tags = [os.getenv('TRAVIS_BRANCH')]
 
     i = 1
     while os.environ.get('BUILD_IMAGE%d' % i, None):
         docker_repo, docker_context, dockerfile_path, docker_tag = re.split(', *', os.environ['BUILD_IMAGE%d' % i])
-        if docker_tag:
-            build(docker_repo, docker_tag, github_project, github_tag, docker_context, dockerfile_path)
-        else:
-            for tag in github_tags:
-                build(docker_repo, tag, github_project, tag, docker_context, dockerfile_path)
+        build(docker_repo, docker_tag, github_project, github_tags, docker_context, dockerfile_path)
         i += 1
 
 except requests.exceptions.RequestException as e:
