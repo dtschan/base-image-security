@@ -27,7 +27,7 @@ def build(docker_repo, docker_tag, github_project, github_tag, docker_context, d
     data = {
         "archive_url": "https://github.com/%s/archive/%s.tar.gz" % (github_project, tag),
         "docker_tags": [docker_tag],
-        "context": "/%s-%s%s" % (github_repo, tag2, docker_context),
+        "context": "/%s-%s%s" % (github_repo, tag, docker_context),
         "dockerfile_path": "/%s-%s%s%s" % (github_repo, tag2, docker_context, dockerfile_path)
     }
     response = requests.post('%s/%s/build/' % (endpoint, docker_repo), headers=headers, json=data)
