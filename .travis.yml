@@ -6,5 +6,7 @@ script: python ./update_docker_images.py
 env:
   global:
   - PYTHONUNBUFFERED=true
-  - BUILD_IMAGE1="dtschan/base-image-security, /, Dockerfile.centos, centos"
-  - BUILD_IMAGE2="dtschan/base-image-security, /, Dockerfile.ubuntu, ubuntu"
+  - BUILD_IMAGE1="dtschan/base-image-security, /, Dockerfile.debian, debian"
+#  - BUILD_IMAGE1="dtschan/base-image-security, /, Dockerfile.centos, centos"
+#  - BUILD_IMAGE2="dtschan/base-image-security, /, Dockerfile.ubuntu, ubuntu"
+#  - BUILD_TAGS="v1.0.1"
