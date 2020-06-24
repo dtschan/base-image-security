@@ -9,3 +9,4 @@ env:
   - BUILD_IMAGE1="dtschan/base-image-security, /, Dockerfile.debian, debian"
   - BUILD_IMAGE2="dtschan/base-image-security, /, Dockerfile.centos, centos"
   - BUILD_IMAGE3="dtschan/base-image-security, /, Dockerfile.ubuntu, ubuntu"
+  - BUILD_IMAGE4="dtschan/base-image-security, /, Dockerfile.httpd-24-centos7, httpd-24-centos7"
